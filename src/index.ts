@@ -10,7 +10,7 @@ dotenv.config();
 const app = express();
 app.use(bodyParser.json())
 
-app.use(express.static(path.join(__dirname, './client')));
+app.use("/static", express.static(path.join(__dirname, './client')));
 
 app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, './client', 'index.html'));
