@@ -1,5 +1,5 @@
 import {Buffer} from 'buffer';
-import MailType from '../types/MailType';
+import {MailType} from '../types/MailType';
 import dotenv from 'dotenv';
 const nodemailer = require("nodemailer");
 

@@ -2,7 +2,7 @@ import express, { Express, Request, Response } from 'express';
 import dotenv from 'dotenv';
 import path from 'path';
 import { sendEmail } from './services/MailService';
-import MailType from './types/MailType';
+import {MailType, MailRequest} from './types/MailType';
 import bodyParser from 'body-parser';
 
 dotenv.config();
@@ -18,19 +18,33 @@ app.get('/', function (req, res) {
 
 app.post('/api/send-email', async (req, res) =>{
   console.log(req.body);
-  const { subject, text } = req.body;
+  const mailRequest = req.body as MailRequest;
 
-  if (!subject || !text) {
-    return res.status(400).json({ error: 'Subject and text are required.' });
+  if (mailRequest.phone === null || mailRequest.email === null) {
+    return res.status(400).json({ error: 'Email cannot be null' });
   }
+
+
+  const createMailOptions = (mailRequest:MailRequest) => (
+     `
+      <h2>Contact Details:</h2>
+      <p><strong>First Name:</strong> ${mailRequest.firstName}</p>
+      <p><strong>Last Name:</strong> ${mailRequest.lastName}</p>
+      <p><strong>Email:</strong> ${mailRequest.email}</p>
+      <p><strong>Phone:</strong> ${mailRequest.phone || 'N/A'}</p>
+  
+      <h2>Message:</h2>
+      <p>${mailRequest.note}</p>
+  
+      <p>Additional information or formatting can be added here.</p>
+    `);
 
     // Define the email details
   const email: MailType = {
     from: '"BYDH WEB 👻" <bydh.nz@gmail.com>',
     to: 'info@bydh.co.nz',
-    subject: subject,
-    text: text,
-    html: `<b>${text}</b>`,
+    subject: `${mailRequest.firstName} ${mailRequest.lastName} contact BYDH via Website`,
+    html: createMailOptions(mailRequest),
   };
 
   try {

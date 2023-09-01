@@ -1,7 +1,5 @@
 
-
-
-type MailType = {
+export type MailType = {
     from: string;
     to: string;
     subject: string;
@@ -9,4 +7,12 @@ type MailType = {
     html?: string;
   };
   
-export default MailType;
+export type MailRequest = {
+    firstName: string;
+    lastName: string;
+    email: string;
+    phone: string;
+    note: string;
+
+}
+
