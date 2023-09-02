@@ -10,8 +10,11 @@ dotenv.config();
 const app = express();
 app.use(bodyParser.json())
 
-app.use("/static", express.static(path.join(__dirname, './client')));
 
+// Serve static files from the "./client" directory at the root URL ('/')
+app.use(express.static(path.join(__dirname, './client')));
+
+// Define a catch-all route that serves the "index.html" file for all other routes
 app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, './client', 'index.html'));
 });
