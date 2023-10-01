@@ -10,6 +10,14 @@ dotenv.config();
 const app = express();
 app.use(bodyParser.json())
 
+// Manually redirect HTTP to HTTPS
+app.use((req, res, next) => {
+  if (req.headers['x-forwarded-proto'] && req.headers['x-forwarded-proto'] !== 'https') {
+    return res.redirect(`https://${req.hostname}${req.url}`);
+  }
+  next();
+});
+
 
 // Serve static files from the "./client" directory at the root URL ('/')
 app.use(express.static(path.join(__dirname, './client')));
